@@ -1,1 +1,6 @@
-ROS node for recording audio and video with the Kinect.
+Install hark-kinect:
+
+http://winnie.kuis.kyoto-u.ac.jp/HARK/wiki.cgi?page=HARK-KINECT+Installation+Instructions+%28as+a+USB+recording+device%29
+
+Install openni and verify you can see stuff: 
+http://wiki.ros.org/openni_launch/Tutorials/QuickStart
