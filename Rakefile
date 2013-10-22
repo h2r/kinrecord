@@ -13,3 +13,8 @@ end
 task :replay_bag_bag do
   sh "rosbag play --clock kinect.bag"
 end
+
+
+task :mencoder do
+  sh "mencoder -ovc lavc -mf fps=3:type=jpg 'mf://test/*.jpg' -o time_lapse-test.avi "
+end

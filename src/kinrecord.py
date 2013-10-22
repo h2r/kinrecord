@@ -13,14 +13,16 @@ import time
 class Kinrecord(object):
     def __init__(self):
         self.bridge = CvBridge()
-        
+        self.i = 0
     def callback(self, image_msg):
         rospy_time = image_msg.header.stamp
         python_time = time.ctime(rospy_time.to_sec())
         #print python_time
 
         cv_image = self.bridge.imgmsg_to_cv(image_msg, "bgr8")
-        cv.SaveImage("test.jpg", cv_image)
+        fname = "test/%.10d.jpg" % self.i
+        cv.SaveImage(fname, cv_image)
+        self.i += 1
         #cv.ShowImage("Image window", cv_image)
         #cv.WaitKey(3)
   
