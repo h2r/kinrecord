@@ -1,20 +1,33 @@
 
-task :save_bag do
-  # this saves the depth image and the raw rgb image. 
-  # I got these paramters from here: http://mirror.umd.edu/roswiki/openni_launch%282f%29Tutorials%282f%29BagRecordingPlayback.html
-  sh "rosbag record /camera/depth_registered/image_raw /camera/depth_registered/camera_info /camera/rgb/image_raw /camera/rgb/camera_info -O kinect.bag "
+task :launchOpenNI do
+  # step 1 this launches the openNI dirvers 
+  sh "rosparam set /use_sim_time false"
+  sh "roslaunch openni_launch openni.launch"
 end
-  
 
-task :replay_bag_openni do
+task :recordSet do
+  # step 2 this records the rosbag and the audio file
+  sh "./smallRecAV.sh"
+end
+
+task :launchOpenNI_WD do
+  # step 3 before this kill the old openNI drivers and then start these
+  sh "rosparam set /use_sim_time true"
   sh "roslaunch openni_launch openni.launch load_driver:=false"
+  sh "echo blah"
 end
 
-task :replay_bag_bag do
-  sh "rosbag play --clock kinect.bag"
+task :getImages do
+  # step 4 gets images from the rosbag recorded previously
+  sh "./getImages.sh"
 end
 
-
-task :mencoder do
-  sh "mencoder -ovc lavc -mf fps=3:type=jpg 'mf://test/*.jpg' -o time_lapse-test.avi "
+task :convertAll do
+  # step 5 combine the AV streams together after snipping the audio by 3s can correct the amount of snipping of the audio in the first line
+  sh "ffmpeg -ss 00:00:03 -i output.mp3 -acodec copy outputNew.mp3"
+  sh "ffmpeg -r 30 -i frame%04d.jpg -i outputNew.mp3 -r 30 -strict experimental out.mp4"
 end
+
+#task :echoCrap do
+#sh "echo blah"
+#end
